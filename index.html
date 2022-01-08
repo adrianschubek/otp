@@ -109,6 +109,7 @@
 
     </div>
     <script src="/bootstrap.bundle.min.js"></script>
+    <script src="/base64.min.js"></script>
     <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('main', () => ({
@@ -124,7 +125,8 @@
 
             otp() {
                 this.lengthMismatch = false;
-                const inText = this.inType == 1 ? atob(this.inText) : this.inText
+                // const inText = this.inType == 1 ? Base64.atob(this.inText) : this.inText
+                const inText = this.inType == 1 ? Base64.decode(this.inText) : this.inText
 
                 if (this.randomKey) {
                     // create random key
@@ -139,9 +141,10 @@
 
                 this.outText = ""
                 for (let i = 0; i < inText.length; i++) {
-                    this.outText += (String.fromCharCode(inText[i].charCodeAt(0) ^ this.key[i].charCodeAt(0)))
+                    this.outText += String.fromCharCode(inText[i].charCodeAt(0) ^ this.key[i].charCodeAt(0))
                 }
-                if (this.outType == 1) this.outText = btoa(this.outText)
+                // if (this.outType == 1) this.outText = Base64.btoa(this.outText)
+                if (this.outType == 1) this.outText = Base64.encode(this.outText)
                 return this.outText
             },
             dec2hex(dec) {
@@ -153,7 +156,23 @@
                 let r = Array.from(arr, this.dec2hex).join('')
                 while (r.length > len) r = r.substring(0, r.length - 1)
                 return r
-            }
+            },
+            // handleFileUpload() {
+            //     var files = event.target.files
+            //     var reader = new FileReader()
+            //     reader.onload = function() {
+                    
+            //         var contents = this.result
+
+            //         for (let j = 0; j < contents.length; j++) {
+            //         if (contents.substr(j, 1) === 'a') {
+            //             console.log(j)
+            //         }
+            //         }
+            //     }
+
+            //     reader.readAsText(files[0])
+            // }
         }));
     })
     </script>
